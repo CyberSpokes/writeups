@@ -25,9 +25,9 @@ We see port **22** (SSH) and port **80** (HTTP)
 We visit the http website (port 80)
 We are prompted to the login page for the CMS
 
-```
+`
 http://[TARGET_IP]/login.php
-```
+`
 
 Now, we need to find the default username and password for the cms which is easy through a quick online search *(or brute force it, but in this situation it is not needed)*
 
