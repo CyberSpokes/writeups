@@ -45,6 +45,7 @@ The threat actor gathered information about the domain `http://jackcolt.dev`, th
 
 Let's take another look at those credentials. It appears the password is Base64 encoded?!
 Lets decode it using [CyberChef](https://gchq.github.io/CyberChef/).
-![](https://raw.githubusercontent.com/CyberSpokes/writeups/refs/heads/main/HTB%20University%20CTF%202024/forensics/Frontier%20Exposed/images/frontierexposed2.png)
+![](https://raw.githubusercontent.com/CyberSpokes/writeups/refs/heads/main/HTB%20University%20CTF%202024/forensics/Frontier%20Exposed/images/frontierexposed2.png)  
+
 And we got the flag!
 
