@@ -187,7 +187,7 @@ Using a password came in handy since Windows defender detected the malware and p
 
 Inside the VM the first thing, of course, was to open the flag.txt.yorm and see if its the actual flag. To nobody's surprise, it was encrypted :)
 
-So, because I suck at reversing stuff, I decided to play around with it and see what it does that way. After running it in multiple sandboxes and analyzing strings and processes and dropped files, I realized that this malware encrypts the files ofthe folder from where it is launched. I hoped this wouldnt be a deterministic encryption like AES, so I decided to see if that was the case. So i created 3 text files, with the same content.
+So, because I suck at reversing stuff, I decided to play around with it and see what it does that way. After running it in multiple online sandboxes and analyzing strings and processes and dropped files, I realized that this malware encrypts the files ofthe folder from where it is launched. I hoped this wouldnt be a deterministic encryption like AES, so I decided to see if that was the case. So i created 3 text files, with the same content.
 
 ![](https://raw.githubusercontent.com/CyberSpokes/writeups/refs/heads/main/NUS%20GreyHats%20CTF%20Quals%202025/notsus/images/3_test_files.png)  
 ![](https://raw.githubusercontent.com/CyberSpokes/writeups/refs/heads/main/NUS%20GreyHats%20CTF%20Quals%202025/notsus/images/3_encrypted_files.png)  
@@ -278,4 +278,4 @@ for f in c('.'):
 The function `b(a, c)` is a direct implementation of the RC4 encryption algorithm (Go ask ChatGPT if you don't believe me), and is uses the plaintext key `HACKED!`. With this, we visit CyberChef like before, aaaaaannnddd:
 ![](https://raw.githubusercontent.com/CyberSpokes/writeups/refs/heads/main/NUS%20GreyHats%20CTF%20Quals%202025/notsus/images/flag.png)
 
-***I made it way harder than it had to be didn't I?***
+***I made it way harder than it had to be, didn't I?***
