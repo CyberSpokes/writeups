@@ -141,7 +141,7 @@ Count the bytes from 0x40 until we reach 54 (Start of "This"):
 0E 1F BA 0E 00 B4 09 CD 21 B8 01 4C CD 21 ***54*** 68  
 
 The sequence 54 68 ... begins at offset 0x4E, which is decimal 78.  
-Now the final thing we need is the encryption header, which is easy to find by looking at the article. From the CRC `0EC8CB26` we see that the most significant byte is 0E. So this is what we're going to use!
+Now the final thing we need is the encryption header, which is easy to find by looking at the article. From the CRC `0EC8CB26` we see that the last (high‐order) byte of the CRC is 0E. So this is what we're going to use!
 
 One final thing we must do is  put our string (This program...) inside a .bin file, which we do like so:
 ```
@@ -159,7 +159,7 @@ printf 'This program cannot be run in DOS mode.' > plain.bin
  -c specifies the file inside the zip  
  -p is our plaintext  
  -o specifies the offset, in our case 0x78  
- -x -1 0e specifies the MSB of the CRC, and hence the beginning of the .exe  
+ -x -1 0e specifies the last (high‐order) byte of the CRC, and hence the beginning of the .exe  
 
 After some time and lots of stress, we see that it works!  
 ![](https://raw.githubusercontent.com/CyberSpokes/writeups/refs/heads/main/NUS%20GreyHats%20CTF%20Quals%202025/notsus/images/cracking_succ.png)
@@ -185,11 +185,11 @@ Using a password came in handy since Windows defender detected the malware and p
 
 Inside the VM the first thing, of course, was to open the flag.txt.yorm and see if its the actual flag. To nobody's surprise, it was encrypted :)
 
-So, because I suck at reversing stuff, I decided to play around with it and see what it does that way. After running it in multiple sandboxes and analyzing strings and processes and dropped files, I realized that this malware encrypts the files ofthe folder from where it is launched. I hoped this wouldnt be asymmetric encryption like AES, so I decided to see if that was the case. So i created 3 text files, with the same content.
+So, because I suck at reversing stuff, I decided to play around with it and see what it does that way. After running it in multiple sandboxes and analyzing strings and processes and dropped files, I realized that this malware encrypts the files ofthe folder from where it is launched. I hoped this wouldnt be a deterministic encryption like AES, so I decided to see if that was the case. So i created 3 text files, with the same content.
 
 ![](https://raw.githubusercontent.com/CyberSpokes/writeups/refs/heads/main/NUS%20GreyHats%20CTF%20Quals%202025/notsus/images/3_test_files.png)  
 ![](https://raw.githubusercontent.com/CyberSpokes/writeups/refs/heads/main/NUS%20GreyHats%20CTF%20Quals%202025/notsus/images/3_encrypted_files.png)  
-From this, i was indeed very lucky, and my input  `test 12356` became garbage, but the same garbage across all 3 files! This means symmetric encryption, which means we can recover the flag by reversing the encryption process.  
+From this, i was indeed very lucky, and my input  `test 12356` became garbage, but the same garbage across all 3 files! This means static and symmetric encryption, which means we can recover the flag by reversing the encryption process.  
 
 So, I tried reversing this, and my first thought was to use XOR *(undeniably the best encryption algorithm known to man)*. By XORing the before and after byte-by-byte, we can get the key. So i wrote a script:
 ```
@@ -207,7 +207,7 @@ print("Recovered key (hex):", key.hex())
 After a brief visit to [Cyberchef](https://gchq.github.io/CyberChef/),  
 ![](https://raw.githubusercontent.com/CyberSpokes/writeups/refs/heads/main/NUS%20GreyHats%20CTF%20Quals%202025/notsus/images/half_flag.png)  
 
- I only got half the flag for some reason, so I once again wanted to give up, so I told a friend to take a look at it. 
+ I only got half the flag for some reason.At that point I felt like a wizard who had just pulled half a rabbit out of a hat... and then realized the other half was still under the table. So I did the best next logical thing, told a teammate to take a look at it. 
 
 He discovered **BY ACCIDENT** that the malware, when ran again, DECRYPTS the contents of the folder it previously encrypted!  
 ***I was officially cooked***
@@ -215,11 +215,12 @@ He discovered **BY ACCIDENT** that the malware, when ran again, DECRYPTS the con
 
 ### Notes
 
-I know this *probably* wasn't the designated solution, but it is the truth.
+I know this *probably* wasn't the designated solution, but it is the truth. Moral of the story is that when in doubt, read the decompiled code. And maybe sleep or touch grass once in a while.
+
 ## EDIT
 
 I don't know if this is appropriate but momma didn't raise no quitter,so I revisited the reversing to get the key and so on. Also some things i forgot to mention:
-- I checked the file in virustotal and on any.run, which tracked me off course since any.run said it was upx packed, and so I tried unpacking it like that. Also binwalk worked and gave me pretty much all .pyc files but I was too focused on upx to even notice   **insert facepalm emoji here**  
+- I checked the file in virustotal and on any.run, which tracked me off course since any.run said it was upx packed, and so I tried unpacking it like that. Also binwalk worked and gave me pretty much all .pyc files but I was too focused on upx to even notice...   **insert facepalm emoji here**  
 
 - What i tried doing in my out of the box reversing was to assume the malware used something like this:
 ```
