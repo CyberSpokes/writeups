@@ -6,7 +6,7 @@
 
 ### Part 1, What the F@*K is this?!
 
-We are presented with a "files.zip", which is a... zip archive (What a surprise) with 2 files inside it.
+We are presented with a "files.zip", which is a... zip archive (What a surprise 🙄) with 2 files inside it.
 
 ![](https://raw.githubusercontent.com/CyberSpokes/writeups/refs/heads/main/NUS%20GreyHats%20CTF%20Quals%202025/notsus/images/notsus_files1.png)  
 
@@ -103,9 +103,11 @@ Great! We have our plaintext!
 ``This program cannot be run in DOS mode``  
 
 And of course the next file i randomly opened had to make me lose my sanity (Valve pls fix)  
-![](https://raw.githubusercontent.com/CyberSpokes/writeups/refs/heads/main/NUS%20GreyHats%20CTF%20Quals%202025/notsus/images/tf2x64.png)  
-This is the tf2_win64.exe and of course it had to have a custom header, so I was ready to switch careers and start trading crypto.
+![](https://raw.githubusercontent.com/CyberSpokes/writeups/refs/heads/main/NUS%20GreyHats%20CTF%20Quals%202025/notsus/images/tf2x64.png)    
+
+This is the tf2_win64.exe and of course it had to have a custom header, so I was ready to switch careers and start trading crypto.  
 BUT because the market is so unstable, I took one last look at the IDA uninstaller *(Why not, who are you to judge anyways?)* .  
+
 ![](https://raw.githubusercontent.com/CyberSpokes/writeups/refs/heads/main/NUS%20GreyHats%20CTF%20Quals%202025/notsus/images/ida_uninstaller_hex.png)  
 And now we are cooking!  
 So, back to the article. We have our 12 bytes, sure, but where are they?  
@@ -210,18 +212,19 @@ After a brief visit to [Cyberchef](https://gchq.github.io/CyberChef/),
  I only got half the flag for some reason.At that point I felt like a wizard who had just pulled half a rabbit out of a hat... and then realized the other half was still under the table. So I did the best next logical thing, told a teammate to take a look at it. 
 
 He discovered **BY ACCIDENT** that the malware, when ran again, DECRYPTS the contents of the folder it previously encrypted!  
-***I was officially cooked***
+
+## ***I was officially cooked***
 
 
 ### Notes
 
-I know this *probably* wasn't the designated solution, but it is the truth. Moral of the story is that when in doubt, read the decompiled code. And maybe sleep or touch grass once in a while.
+I know this *probably* wasn't the designated solution, but it is the truth. Moral of the story is that when in doubt, read the decompiled code. And maybe sleep... or **touch grass** once in a while. This entire challenge can be shortened into one line:  
+Me: 🤓 vs. Malware: 🤪
 
 ## EDIT
 
-I don't know if this is appropriate but momma didn't raise no quitter,so I revisited the reversing to get the key and so on. Also some things i forgot to mention:
-- I checked the file in virustotal and on any.run, which tracked me off course since any.run said it was upx packed, and so I tried unpacking it like that. Also binwalk worked and gave me pretty much all .pyc files but I was too focused on upx to even notice...   **insert facepalm emoji here**  
-
+I don't know if this is appropriate but momma didn't raise no quitter, so I revisited the reversing to get the key and so on. Also some things i forgot to mention:
+- I checked the file in virustotal and on any.run, which tracked me off course since any.run said it was upx packed, and so I tried unpacking it like that. Also binwalk worked and gave me pretty much all .pyc files but I was too focused on upx to even notice...  🤦‍♂️
 - What i tried doing in my out of the box reversing was to assume the malware used something like this:
 ```
 cipher[i] = plain[i] XOR ((base_key[i % N] + i) mod 256)
